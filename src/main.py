@@ -2,9 +2,10 @@
 from flask import Flask, jsonify, request
 import json
 
-
+# Erstelle eine neue Flask App
 app = Flask(__name__)
-# Unsere Temperaturwerte, sie haben jeweils eine id und die eigentliche Temperatur
+# Unsere Temperaturwerte, sie haben jeweils eine id und die eigentliche Temperatur, sie werden zur demonstration in
+# einem Array gespeichert. In einer echten Applikation wäre eine Datenbank anzuraten!
 temperatures = [ {'id': 1, 'temperature': 25.5},
                  {'id': 2, 'temperature': 26.8},
                  {'id': 3, 'temperature': 33.2}
