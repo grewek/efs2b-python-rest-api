@@ -15,16 +15,24 @@ temperatures = [ {'id': 1, 'temperature': 25.5},
 #Diese get route gibt uns alle daten zurück
 @app.route('/temperatures', methods=['GET'])
 def get_temperatures():
+    # Wir 'serialisieren' unsere Temperaturwerte in das JSON format!
     return jsonify(temperatures)
 
 @app.route("/temperatures/<id>", methods=['GET'])
 def get_temperature(id):
+    # Wir ziehen eins von id_value ab, da unser erste element im obigen Array bei 0 startet nicht bei 1!
     id_value = int(id) - 1
+    # Der Wert könnte unter 0 sein wenn der Nutzer 0 als Wert spezifiziert hat somit müssen wir die Route gegen
+    # werte absichern die einen Undeflow erzeugen könnten
     if id_value < 0:
+        #Wir benachrichtigen den Nutzer, dass wir den gewünschten Wert nicht liefern können
         return '', 404
+    # Dasselbe gilt auch, wenn der Nutzer versucht werte abzurufen die noch nicht existieren
     elif id_value >= len(temperatures):
+        #Auch hier benachrichtigen wir den Nutzer über den fehlschlag der Operation
         return '', 404
-    
+
+    # Wir serialisieren den angefragten temperatur wert wieder
     return jsonify(temperatures[int(id) - 1])
 
 @app.route("/temperatures/<id>", methods=['PATCH'])
