@@ -1,18 +1,16 @@
 # Python 3 Webserver mit REST API
 from flask import Flask, jsonify, request
-
-from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 
 
 app = Flask(__name__)
-#Unsere Temperaturwerte, sie haben jeweils eine id und die eigentliche Temperatur
+# Unsere Temperaturwerte, sie haben jeweils eine id und die eigentliche Temperatur
 temperatures = [ {'id': 1, 'temperature': 25.5},
                  {'id': 2, 'temperature': 26.8},
                  {'id': 3, 'temperature': 33.2}
 ]
 
-# Diese get route gibt uns alle daten zurück
+# Diese GET route gibt uns alle daten zurück die unser Array beinhaltet
 @app.route('/temperatures', methods=['GET'])
 def get_temperatures():
     # Wir 'serialisieren' unsere Temperaturwerte in das JSON format!
@@ -23,14 +21,14 @@ def get_temperatures():
 def get_temperature(id):
     # Wir ziehen eins von id_value ab, da unser erste element im obigen Array bei 0 startet nicht bei 1!
     id_value = int(id) - 1
-    # Der Wert könnte unter 0 sein wenn der Nutzer 0 als Wert spezifiziert hat somit müssen wir die Route gegen
-    # werte absichern die einen Undeflow erzeugen könnten
+    # Der obige Wert könnte unter 0 sein wenn der Nutzer 0 als Wert spezifiziert hat
+    # somit müssen wir die Route gegen werte absichern die einen Undeflow erzeugen könnten
     if id_value < 0:
-        #Wir benachrichtigen den Nutzer, dass wir den gewünschten Wert nicht liefern können
+        # Wir benachrichtigen den Nutzer, dass wir den gewünschten Wert nicht liefern können
         return '', 404
-    # Dasselbe gilt auch, wenn der Nutzer versucht werte abzurufen die noch nicht existieren
+    # Dasselbe gilt auch, wenn der Nutzer versucht werte abzurufen, die noch nicht existieren (Overflow)
     elif id_value >= len(temperatures):
-        #Auch hier benachrichtigen wir den Nutzer über den fehlschlag der Operation
+        # Auch hier benachrichtigen wir den Nutzer über den fehlschlag der Operation
         return '', 404
 
     # Wir serialisieren den angefragten temperatur wert wieder
@@ -49,7 +47,7 @@ def patch_temperature(id):
         # Auch hier antworten wir mit einem 404 Fehler wenn der Wert nicht exisistiert
         return '', 404
     # Underflow?
-    elif id_value - 1 < 0:
+    elif id_value < 0:
         return '', 404
     else:
         # Sollte alles bis hierhin geklappt haben, können wir die vom Nutzer übergebenen Daten
