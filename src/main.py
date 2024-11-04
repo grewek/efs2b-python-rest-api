@@ -20,10 +20,10 @@ def get_temperatures():
 # Versucht die spezifizierte ID vom Server zu lesen
 @app.route("/temperatures/<id>", methods=['GET'])
 def get_temperature(id):
-    # Wir ziehen eins von id ab, da unser erste element im obigen Array bei 0 startet nicht bei 1!
+    # Wir ziehen eins von id ab, da unser erste Element im obigen Array bei 0 startet nicht bei 1!
     id_value = int(id) - 1
-    # Der obige Wert könnte unter 0 sein, wenn der Nutzer 0 als Wert spezifiziert hat
-    # somit müssen wir die Route gegen Werte absichern die einen Undeflow erzeugen könnten
+    # Der obige Wert könnte unter 0 sein, wenn der Nutzer 0 als Wert spezifiziert hat.
+    # Somit müssen wir die Route gegen Werte absichern die einen Undeflow erzeugen könnten
     if id_value < 0:
         # Wir benachrichtigen den Nutzer, dass wir den gewünschten Wert nicht liefern können
         return '', 404
