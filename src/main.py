@@ -17,13 +17,13 @@ def get_temperatures():
     # Wir 'serialisieren' unsere Temperaturwerte in das JSON format!
     return jsonify(temperatures)
 
-# Versucht, den spezifizierten Wert vom Nutzer aus dem Array zu holen und sie zurückzugeben
+# Versucht die spezifizierte ID vom Server zu lesen
 @app.route("/temperatures/<id>", methods=['GET'])
 def get_temperature(id):
-    # Wir ziehen eins von id_value ab, da unser erste element im obigen Array bei 0 startet nicht bei 1!
+    # Wir ziehen eins von id ab, da unser erste element im obigen Array bei 0 startet nicht bei 1!
     id_value = int(id) - 1
-    # Der obige Wert könnte unter 0 sein wenn der Nutzer 0 als Wert spezifiziert hat
-    # somit müssen wir die Route gegen werte absichern die einen Undeflow erzeugen könnten
+    # Der obige Wert könnte unter 0 sein, wenn der Nutzer 0 als Wert spezifiziert hat
+    # somit müssen wir die Route gegen Werte absichern die einen Undeflow erzeugen könnten
     if id_value < 0:
         # Wir benachrichtigen den Nutzer, dass wir den gewünschten Wert nicht liefern können
         return '', 404
@@ -32,14 +32,14 @@ def get_temperature(id):
         # Auch hier benachrichtigen wir den Nutzer über den fehlschlag der Operation
         return '', 404
 
-    # Wir serialisieren den angefragten temperatur wert wieder
+    # Wir serialisieren den angefragten temperaturwert wieder zurück in das JSON format
     return jsonify(temperatures[int(id) - 1])
 
-# Die Patchroute kann benutzt werden um einen bereits vorhandenen Eintrag zu ändern! Anders als PUT muss man hierbei
+# Die Patch Route kann benutzt werden, um einen bereits vorhandenen Eintrag zu ändern! Anders als PUT muss man hierbei
 # nicht den gesamten Eintrag neuschreiben, sondern kann einzelne Werte ändern
 @app.route("/temperatures/<id>", methods=['PATCH'])
 def patch_temperature(id):
-    # Wir nehmen die ID die uns der Nutzer gesendet hat und verwandeln sie in eine Ganzzahl, dann ziehen wir
+    # Wir nehmen die ID, die uns der Nutzer gesendet hat und verwandeln sie in eine Ganzzahl, dann ziehen wir
     # eins ab da unser Array null basiert ist.
     id_value = int(id) - 1
 
@@ -52,15 +52,15 @@ def patch_temperature(id):
         return '', 404
     else:
         # Sollte alles bis hierhin geklappt haben, können wir die vom Nutzer übergebenen Daten
-        # deserialisieren (JSON -> Python)
+        # deserialisieren.
         temperature = json.loads(request.data)
-        # new_temp beinhaltet jetzt den neuen Temperatur wert. Zur sicherheit wandeln wir den wert nochmals in einen
+        # new_temp beinhaltet jetzt den neuen Temperaturwert. Zur sicherheit wandeln wir den Wert nochmals in einen
         # floating point typen um!
         new_temp = float(temperature['temperature'])
         # Hier setzten wir den gewünschten Eintrag auf die neue Temperatur
         temperatures[id_value]['temperature'] = new_temp
         # Wir melden den Erfolg der Operation mit Code 201 und leiten den Nutzer auf /temperatures weiter
-        return '', 201, { 'location': f'/temperatures'}
+        return '', 201, {'location': f'/temperatures'}
 
 # Route die benutzt wird um neue Werte hinzuzufügen, Werte werden immer an das Ende des Arrays gepackt.
 @app.route('/temperatures', methods=['POST'])
