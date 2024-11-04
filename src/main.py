@@ -6,7 +6,7 @@ import json
 
 
 app = Flask(__name__)
-#Unsere Temperturwerte, sie haben jeweils eine id und die eigentliche Temperatur
+#Unsere Temperaturwerte, sie haben jeweils eine id und die eigentliche Temperatur
 temperatures = [ {'id': 1, 'temperature': 25.5},
                  {'id': 2, 'temperature': 26.8},
                  {'id': 3, 'temperature': 33.2}
